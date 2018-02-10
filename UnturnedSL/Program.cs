@@ -20,7 +20,7 @@ namespace UnturnedSL
              "Config exists: " + File.Exists("settings.cfg") + Environment.NewLine); DEBUGGING PURPOSES ONLY*/
             if (!File.Exists("settings.cfg")) { /*Checks for new users*/
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Welcome!", Environment.NewLine);
+                Console.WriteLine("Welcome!" + Environment.NewLine);
                 string[] defvalue = {
                     "PEI",
                     "USL-My server",
@@ -58,6 +58,7 @@ namespace UnturnedSL
                         {
                             loopval++;
                         }
+                        Console.Clear();
                     }
                 }
                 /*Saves data*/
@@ -82,7 +83,6 @@ namespace UnturnedSL
                 settings.Close();
                 Console.ForegroundColor = ConsoleColor.Green;
                 string launchop = "-nographics -batchmode -name " + "\"" + name + "\"" + " -map " + map + " -welcome " + "\"" + welcome + "\"" + " -port:" + port + " " + extralo + " +secureserver/" + data;
-                string curdirargs = path + @"\Unturned.exe " + launchop;
                 if (
                     String.IsNullOrWhiteSpace(name) ||
                     String.IsNullOrWhiteSpace(map) ||
@@ -119,8 +119,9 @@ namespace UnturnedSL
                     "Extra options:" + "\t" + "\t" + extralo + Environment.NewLine +
                     "Path to Game:" + "\t" + "\t" + path + Environment.NewLine;
                 Console.WriteLine(displaytext);
-                try { Process.Start(path + @"\Unturned.exe" + launchop);} catch { }
+                try { Process.Start(path + @"\Unturned.exe ", launchop); } catch { }
                 Console.ReadKey();
+                Environment.Exit(0);
 
 
             } else {
