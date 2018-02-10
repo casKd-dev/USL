@@ -38,56 +38,36 @@ namespace UnturnedSL
                     "Do you want any other parameters for your server?",
                     "Where is your Unturned installation located?"
             };
-                /*Asks user to setup their own server, which later saves in a config file*/
+                /*Asks user to setup their own server, which later saves in a config file, TODO: Try looping this!*/
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine(question[0] + Environment.NewLine + "Default value: " + defvalue[0]);
-                string map = Console.ReadLine();
-                if (String.IsNullOrWhiteSpace(map))
+
+                string[] setvals = { "map", "name", "welcome", "port", "data", "extralo", "path" };
+                var loopval = 0;
+                string[] answ = new string[7];
+                foreach (string val in setvals)
                 {
-                    map = defvalue[0];
+                    while (loopval <= 6)
+                    {
+                        Console.WriteLine(question[loopval] + Environment.NewLine + "Default value: " + defvalue[loopval]);
+                        answ[loopval] = Console.ReadLine();
+                        if (String.IsNullOrWhiteSpace(answ[loopval]))
+                        {
+                            answ[loopval] = defvalue[loopval];
+                            loopval++;
+                        } else
+                        {
+                            loopval++;
+                        }
+                    }
                 }
-                Console.Clear();
-                Console.WriteLine(question[1] + Environment.NewLine + "Default value: " + defvalue[1]);
-                string name = Console.ReadLine();
-                if (String.IsNullOrWhiteSpace(name))
-                {
-                    name = defvalue[1];
-                }
-                Console.Clear();
-                Console.WriteLine(question[2] + Environment.NewLine + "Default value: " + defvalue[2]);
-                string welcome = Console.ReadLine();
-                if (String.IsNullOrWhiteSpace(welcome))
-                {
-                    welcome = defvalue[2];
-                }
-                Console.Clear();
-                Console.WriteLine(question[3] + Environment.NewLine + "Default value: " + defvalue[3]);
-                string port = Console.ReadLine();
-                if (String.IsNullOrWhiteSpace(port))
-                {
-                    port = defvalue[3];
-                }
-                Console.Clear();
-                Console.WriteLine(question[4] + Environment.NewLine + "Default value: " + defvalue[4]);
-                string data = Console.ReadLine();
-                if (String.IsNullOrWhiteSpace(data))
-                {
-                    data = defvalue[4];
-                }
-                Console.Clear();
-                Console.WriteLine(question[5] + Environment.NewLine + "Default value: " + defvalue[5]);
-                string extralo = Console.ReadLine();
-                if (String.IsNullOrWhiteSpace(extralo))
-                {
-                    extralo = defvalue[5];
-                }
-                Console.Clear();
-                Console.WriteLine(question[6] + Environment.NewLine + "Default value: " + defvalue[6]);
-                string path = Console.ReadLine();
-                if (String.IsNullOrWhiteSpace(path))
-                {
-                    path = defvalue[6];
-                }
+                string map = answ[0];
+                string name = answ[1];
+                string welcome = answ[2];
+                string port = answ[3];
+                string data = answ[4];
+                string extralo = answ[5];
+                string path = answ[6];
+
                 Console.Clear();
                 TextWriter settings = new StreamWriter("settings.cfg", true);
                 settings.WriteLine(name);
@@ -116,6 +96,13 @@ namespace UnturnedSL
                     Console.WriteLine("Oh, noes! Seems like the settings file contains wrong info." + Environment.NewLine +
                         "Try deleting it or correcting it!" + Environment.NewLine + Environment.NewLine +
                         "If you still get the problem, report it on GitHub!");
+                    Console.WriteLine(Environment.NewLine + "Your settings:" +
+                        Environment.NewLine + Environment.NewLine + "Server Name:" + "\t" + "\t" + name + Environment.NewLine +
+                        "Running Map:" + "\t" + "\t" + map + Environment.NewLine +
+                        "Welcome Msg:" + "\t" + "\t" + welcome + Environment.NewLine +
+                        "Data folder:" + "\t" + "\t" + data + Environment.NewLine +
+                        "Extra options:" + "\t" + "\t" + extralo + Environment.NewLine +
+                        "Path to Game:" + "\t" + "\t" + path + Environment.NewLine);
                     Console.Beep(2300, 250);
                     Console.ReadKey();
                     Environment.Exit(1);
@@ -129,8 +116,10 @@ namespace UnturnedSL
                     "Extra options:" + "\t" + "\t" + extralo + Environment.NewLine +
                     "Path to Game:" + "\t" + "\t" + path + Environment.NewLine;
                 Console.WriteLine(displaytext);
-                try { Process.Start(path + @"\Unturned.exe");} catch { }
+                try { Process.Start(path + @"\Unturned.exe" + launchop);} catch { }
                 Console.ReadKey();
+
+
             } else {
                 TextReader settings = new StreamReader("settings.cfg", true);
                 string name = settings.ReadLine();
@@ -156,6 +145,13 @@ namespace UnturnedSL
                     Console.WriteLine("Oh, noes! Seems like the settings file contains wrong info." + Environment.NewLine +
                         "Try deleting it or correcting it!" + Environment.NewLine + Environment.NewLine +
                         "If you still get the problem, report it on GitHub!" );
+                        Console.WriteLine(Environment.NewLine + "Your settings:" +
+                        Environment.NewLine + Environment.NewLine + "Server Name:" + "\t" + "\t" + name + Environment.NewLine +
+                        "Running Map:" + "\t" + "\t" + map + Environment.NewLine +
+                        "Welcome Msg:" + "\t" + "\t" + welcome + Environment.NewLine +
+                        "Data folder:" + "\t" + "\t" + data + Environment.NewLine +
+                        "Extra options:" + "\t" + "\t" + extralo + Environment.NewLine +
+                        "Path to Game:" + "\t" + "\t" + path + Environment.NewLine);
                     Console.Beep(2300, 250);
                     Console.ReadKey();
                     Environment.Exit(1);
@@ -174,6 +170,7 @@ namespace UnturnedSL
                     string launchop = "-nographics -batchmode -name " + "\"" + name + "\"" + " -map " + map + " -welcome " + "\"" + welcome + "\"" + " -port:" + port + " " + extralo + " +secureserver/" + data;
                     try { Process.Start(path + @"\Unturned.exe ", launchop);} catch { }
                     Console.ReadKey();
+                    Environment.Exit(0);
                 }
             }
         }
