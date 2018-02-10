@@ -1,2 +1,10 @@
 # USL
-An Unturned Server Launcher mainly written in C# . I mainly work on it in my free time, if you want to push or contribute feel free to contact me!
+[![banner.png](https://s14.postimg.org/x2qqyft69/banner.png)](https://postimg.org/image/3nl2pfoml/)
+
+[![GitHub issues](https://img.shields.io/github/issues/casKd-dev/USL.svg?style=for-the-badge)](https://github.com/casKd-dev/USL/issues)
+  
+A Gameserver launcher written in C# . 
+This project aims to help people not as experienced with Unturned or computers in general.
+It is so easy to use in fact, that just pressing enter while having steam installed in the default directory will launch a server without you knowing anything you did.
+
+I mainly work on it in my free time, if you want to push or contribute feel free to contact me!
