@@ -13,10 +13,13 @@ namespace UnturnedSL
         static void Main(string[] args)
         {
             string lauversion = "rewrite 0.9dev-prerelease";
-            string title = "ULS by casKd running on version " + lauversion;
+            string title = "USL by casKd running on version " + lauversion;
             Console.Title = title;
-            Console.WriteLine("Currently running from:" + Environment.NewLine + Directory.GetCurrentDirectory() + Environment.NewLine + "Config exists: " + File.Exists("settings.cfg") + Environment.NewLine);
+            Console.SetWindowSize(100,20);
+            /*Console.WriteLine("Currently running from:" + Environment.NewLine + Directory.GetCurrentDirectory() + Environment.NewLine +
+             "Config exists: " + File.Exists("settings.cfg") + Environment.NewLine); DEBUGGING PURPOSES ONLY*/
             if (!File.Exists("settings.cfg")) { /*Checks for new users*/
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Welcome!", Environment.NewLine);
                 string[] defvalue = {
                     "PEI",
@@ -36,6 +39,7 @@ namespace UnturnedSL
                     "Where is your unturned installation located?"
             };
                 /*Asks user to setup their own server, which later saves in a config file*/
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine(question[0] + Environment.NewLine + "Default value: " + defvalue[0]);
                 string map = Console.ReadLine();
                 if (String.IsNullOrWhiteSpace(map))
@@ -94,19 +98,39 @@ namespace UnturnedSL
                 settings.WriteLine(extralo);
                 settings.WriteLine(path);
                 settings.Close();
-                string launchop = "-nographics -batchmode -hostname " + "\"" + name + "\"" + " -map " + map + " -welcome " + "\"" + welcome + "\"" + " -port:" + port + " +secureserver/" + data + " " + extralo;
+                Console.ForegroundColor = ConsoleColor.Green;
+                string launchop = "-nographics -batchmode -name " + "\"" + name + "\"" + " -map " + map + " -welcome " + "\"" + welcome + "\"" + " -port:" + port + " " + extralo + " +secureserver/" + data;
                 string curdirargs = path + @"\Unturned.exe " + launchop;
+                if (
+                    String.IsNullOrWhiteSpace(name) ||
+                    String.IsNullOrWhiteSpace(map) ||
+                    String.IsNullOrWhiteSpace(welcome) ||
+                    String.IsNullOrWhiteSpace(port) ||
+                    String.IsNullOrWhiteSpace(data) ||
+                    String.IsNullOrWhiteSpace(extralo) ||
+                    String.IsNullOrWhiteSpace(path) ||
+                    !File.Exists(path + @"\Unturned.exe")
+                )
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Oh, noes! Seems like the settings file contains wrong info." + Environment.NewLine +
+                        "Try deleting it or correcting it!" + Environment.NewLine + Environment.NewLine +
+                        "If you still get the problem, report it on GitHub!");
+                    Console.Beep(2300, 250);
+                    Console.ReadKey();
+                    Environment.Exit(1);
+                }
                 string displaytext =
-                    "Server info:  " + Environment.NewLine +
-                    "Name:  " + name + Environment.NewLine +
-                    "Map:  " + map + Environment.NewLine +
-                    "Welcome Message:  " + welcome + Environment.NewLine +
-                    "Port:  " + port + Environment.NewLine +
-                    "Data folder:  " + data + Environment.NewLine +
-                    "Extra launch options:  " + extralo + Environment.NewLine +
-                    "Path:  " + path + Environment.NewLine;
+                    "Server info:" + Environment.NewLine + Environment.NewLine +
+                    "Server Name:" + "\t" + "\t" + name + Environment.NewLine +
+                    "Running Map:" + "\t" + "\t" + map + Environment.NewLine +
+                    "Welcome Msg:" + "\t" + "\t" + welcome + Environment.NewLine +
+                    "Data folder:" + "\t" + "\t" + data + Environment.NewLine +
+                    "Extra options:" + "\t" + "\t" + extralo + Environment.NewLine +
+                    "Path to Game:" + "\t" + "\t" + path + Environment.NewLine;
                 Console.WriteLine(displaytext);
-                try { Process.Start(path + @"\Unturned.exe "); Console.ReadKey(); } catch { }
+                try { Process.Start(path + @"\Unturned.exe");} catch { }
+                Console.ReadKey();
             } else {
                 TextReader settings = new StreamReader("settings.cfg", true);
                 string name = settings.ReadLine();
@@ -124,26 +148,31 @@ namespace UnturnedSL
                     String.IsNullOrWhiteSpace(port) ||
                     String.IsNullOrWhiteSpace(data) ||
                     String.IsNullOrWhiteSpace(extralo) ||
-                    String.IsNullOrWhiteSpace(path)
+                    String.IsNullOrWhiteSpace(path) ||
+                    !File.Exists(path + @"\Unturned.exe")
                     )
                 {
-                    Console.WriteLine("Oh, noes! Seems like the settings file is corrupted." + Environment.NewLine + "Try deleting it or filling the blank spaces!");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Oh, noes! Seems like the settings file contains wrong info." + Environment.NewLine +
+                        "Try deleting it or correcting it!" + Environment.NewLine + Environment.NewLine +
+                        "If you still get the problem, report it on GitHub!" );
                     Console.Beep(2300, 250);
                     Console.ReadKey();
                     Environment.Exit(1);
                 } else {
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Welcome back!" + Environment.NewLine);
                     string displaytext =
-                        "Server info:" + Environment.NewLine +
-                        "Name:  " + name + Environment.NewLine +
-                        "Map:  " + map + Environment.NewLine +
-                        "Welcome Message:  " + welcome + Environment.NewLine +
-                        "Data folder:  " + data + Environment.NewLine +
-                        "Extra launch options:  " + extralo + Environment.NewLine +
-                        "Path:  " + path + Environment.NewLine;
+                        "Server info:" + Environment.NewLine + Environment.NewLine +
+                        "Server Name:" + "\t" + "\t" + name + Environment.NewLine +
+                        "Running Map:" + "\t" + "\t" + map + Environment.NewLine +
+                        "Welcome Msg:" + "\t" + "\t" + welcome + Environment.NewLine +
+                        "Data folder:" + "\t" + "\t" + data + Environment.NewLine +
+                        "Extra options:" + "\t" + "\t" + extralo + Environment.NewLine +
+                        "Path to Game:" + "\t" + "\t" + path + Environment.NewLine;
                     Console.WriteLine(displaytext);
-                    string launchop = "-nographics -batchmode -hostname " + "\"" + name + "\"" + " -map " + map + " -welcome " + "\"" + welcome + "\"" + " -port:" + port + " +secureserver/" + data + " " + extralo;
-                    try { Process.Start(path + @"\Unturned.exe ", launchop); } catch { }
+                    string launchop = "-nographics -batchmode -name " + "\"" + name + "\"" + " -map " + map + " -welcome " + "\"" + welcome + "\"" + " -port:" + port + " " + extralo + " +secureserver/" + data;
+                    try { Process.Start(path + @"\Unturned.exe ", launchop);} catch { }
                     Console.ReadKey();
                 }
             }
