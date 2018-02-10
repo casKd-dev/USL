@@ -12,7 +12,7 @@ namespace UnturnedSL
     {
         static void Main(string[] args)
         {
-            string lauversion = "rewrite 0.9dev-prerelease";
+            string lauversion = "rewrite 1.0";
             string title = "USL by casKd running on version " + lauversion;
             Console.Title = title;
             Console.SetWindowSize(100,20);
@@ -31,12 +31,12 @@ namespace UnturnedSL
                     @"C:\Program Files\Steam\SteamApps\Common\Unturned" };
                 string[] question = {
                     "Which map would you like to play?",
-                    "What name do you wish your server had?",
-                    "What welcome message would you want to set?",
+                    "What name do you wish your server to be called?",
+                    "What welcome message would you want to have?",
                     "What port do you want your server to run on?",
                     "What folder name do you want to assign to your server?",
                     "Do you want any other parameters for your server?",
-                    "Where is your unturned installation located?"
+                    "Where is your Unturned installation located?"
             };
                 /*Asks user to setup their own server, which later saves in a config file*/
                 Console.ForegroundColor = ConsoleColor.Yellow;
