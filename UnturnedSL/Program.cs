@@ -12,7 +12,7 @@ namespace UnturnedSL
     {
         static void Main(string[] args)
         {
-            string lauversion = "1.1 rewrite";
+            string lauversion = "1.12 rewrite";
             string title = "USL by casKd running on version " + lauversion;
             Console.Title = title;
             Console.SetWindowSize(100,20);
@@ -38,7 +38,7 @@ namespace UnturnedSL
                     "Do you want any other parameters for your server?",
                     "Where is your Unturned installation located?"
             };
-                /*Asks user to setup their own server, which later saves in a config file, TODO: Try looping this!*/
+                /*Asks user to setup their own server, which later saves in a config file*/
                 Console.ForegroundColor = ConsoleColor.Yellow;
 
                 string[] setvals = { "map", "name", "welcome", "port", "data", "extralo", "path" };
@@ -60,6 +60,7 @@ namespace UnturnedSL
                         }
                     }
                 }
+                /*Saves data*/
                 string map = answ[0];
                 string name = answ[1];
                 string welcome = answ[2];
@@ -69,6 +70,7 @@ namespace UnturnedSL
                 string path = answ[6];
 
                 Console.Clear();
+                /*Stores data into a file*/
                 TextWriter settings = new StreamWriter("settings.cfg", true);
                 settings.WriteLine(name);
                 settings.WriteLine(map);
@@ -92,6 +94,7 @@ namespace UnturnedSL
                     !File.Exists(path + @"\Unturned.exe")
                 )
                 {
+                    /*Shows an error with information to fix it*/
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Oh, noes! Seems like the settings file contains wrong info." + Environment.NewLine +
                         "Try deleting it or correcting it!" + Environment.NewLine + Environment.NewLine +
@@ -129,7 +132,7 @@ namespace UnturnedSL
                 string data = settings.ReadLine();
                 string extralo = settings.ReadLine();
                 string path = settings.ReadLine();
-                settings.Close(); /*Loads settings from file and checks if all lines are present*/
+                settings.Close(); /*Loads settings from file and checks if all lines are present and valid*/
                 if (
                     String.IsNullOrWhiteSpace(name) ||
                     String.IsNullOrWhiteSpace(map) ||
