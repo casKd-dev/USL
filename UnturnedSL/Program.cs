@@ -119,7 +119,7 @@ namespace UnturnedSL
             Console.Clear();
             /*Stores data into a file*/
             MkDirIfNotExist("config");
-            TextWriter settings = new StreamWriter("settings/config.cfg", true);
+            TextWriter settings = new StreamWriter("config/settings.cfg", true);
             settings.WriteLine(name);
             settings.WriteLine(map);
             settings.WriteLine(welcome);
