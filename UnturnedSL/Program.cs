@@ -28,26 +28,9 @@ namespace UnturnedSL
                 string path = settings.ReadLine();
                 settings.Close(); /*Loads settings from file and checks if all lines are present and valid*/
                 Console.ForegroundColor = ConsoleColor.Green;
-                bool bNum = int.TryParse(port, out int i);
                 string launchop = "-nographics -batchmode -name " + "\"" + name + "\"" + " -map " + map + " -welcome " + "\"" + welcome + "\"" + " -port:" + port + " " + extralo + " +secureserver/" + data;
-                Validation(name, map, welcome, port, data, extralo, path, out bool s);
-                if (s == true)
-                {
-                    /*Shows an error with information to fix it*/
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Oh, noes! Seems like the settings file contains wrong info." + Environment.NewLine +
-                        "Try deleting it or correcting it!" + Environment.NewLine + Environment.NewLine +
-                        "If you still get the problem, report it on GitHub!");
-                    Console.WriteLine(Environment.NewLine + "Your settings:");
-                    DisplayText(name, map, welcome, data, port, extralo, path);
-                    Console.Beep(2300, 250);
-                    Console.ReadKey();
-                    Environment.Exit(1);
-                }
-                DisplayText( name, map, welcome, data, port, extralo, path);
-                try { Process.Start(path + @"\Unturned.exe ", launchop); } catch { }
-                Console.ReadKey();
-                Environment.Exit(0);
+                Validation(name, map, welcome, port, data, extralo, path, out bool valid);
+                Run(valid, name, map, welcome, data, port, extralo, path);
 
 
             } else {
@@ -60,32 +43,13 @@ namespace UnturnedSL
                 string extralo = settings.ReadLine();
                 string path = settings.ReadLine();
                 settings.Close(); /*Loads settings from file and checks if all lines are present and valid*/
-                Validation(name, map, welcome, port, data, extralo, path, out bool s);
-                if (s == true)
-                    /*If conditions have problems, output errors and variables, else, start the server*/
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Oh, noes! Seems like the settings file contains wrong info." + Environment.NewLine +
-                        "Try deleting it or correcting it!" + Environment.NewLine + Environment.NewLine +
-                        "If you still get the problem, report it on GitHub!");
-                    Console.WriteLine(Environment.NewLine + "Your settings:");
-                    DisplayText(name, map, welcome, data, port, extralo, path);
-                    Console.Beep(2300, 250);
-                    Console.ReadKey();
-                    Environment.Exit(1);
-                } else {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("Welcome back!" + Environment.NewLine);
-                    DisplayText(name, map, welcome, data, port, extralo, path);
-                    string launchop = "-nographics -batchmode -name " + "\"" + name + "\"" + " -map " + map + " -welcome " + "\"" + welcome + "\"" + " -port:" + port + " " + extralo + " +secureserver/" + data;
-                    try { Process.Start(path + @"\Unturned.exe ", launchop);} catch { }
-                    Console.ReadKey();
-                    Environment.Exit(0);
-                }
+                settings.Close(); /*Loads settings from file and checks if all lines are present and valid*/
+                Validation(name, map, welcome, port, data, extralo, path, out bool valid);
+                Run(valid, name, map, welcome, port, data, extralo, path);
             }
         }
         /*Validate if all input is correct*/
-        static void Validation(string name, string map, string welcome, string port, string data, string extralo, string path,out bool s)
+        static void Validation(string name, string map, string welcome, string port, string data, string extralo, string path,out bool valid)
         {
             /*Checks if every condition is true*/
             bool bNum = int.TryParse(port, out int i);
@@ -100,7 +64,7 @@ namespace UnturnedSL
                 String.IsNullOrWhiteSpace(path) ||
                 !File.Exists(path + @"\Unturned.exe")
             )
-            { s = true;} else { s = false;}
+            { valid = true;} else { valid = false;}
         }
         /*First setup*/
         static void FirstSetup()
@@ -167,7 +131,7 @@ namespace UnturnedSL
             settings.WriteLine(path);
             settings.Close();
         }
-        static void DisplayText(string name, string map, string welcome, string data, string port, string extralo, string path) 
+        static void DisplayText(string name, string map, string welcome, string port, string data, string extralo, string path) 
             /*Outputs info of the current configuration*/
         {
             string displaytext =
@@ -189,6 +153,31 @@ namespace UnturnedSL
                 Directory.GetCurrentDirectory() + Environment.NewLine +
                 "Config exists: " + File.Exists("settings.cfg") + Environment.NewLine;
             Console.WriteLine(debugtext);
+        }
+        static void Run(bool valid, string name, string map, string welcome, string port, string data, string extralo, string path)
+        {
+            if (valid == true)
+            /*If conditions have problems, output errors and variables, else, start the server*/
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Oh, noes! Seems like the settings file contains wrong info." + Environment.NewLine +
+                    "Try deleting it or correcting it!" + Environment.NewLine + Environment.NewLine +
+                    "If you still get the problem, report it on GitHub!");
+                DisplayText(name, map, welcome, data, port, extralo, path);
+                Console.Beep(2300, 250);
+                Console.ReadKey();
+                Environment.Exit(1);
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Welcome!" + Environment.NewLine);
+                DisplayText(name, map, welcome, data, port, extralo, path);
+                string launchop = "-nographics -batchmode -name " + "\"" + name + "\"" + " -map " + map + " -welcome " + "\"" + welcome + "\"" + " -port:" + port + " " + extralo + " +secureserver/" + data;
+                Process.Start(path + @"\Unturned.exe ", launchop);
+                Console.ReadKey();
+                Environment.Exit(0);
+            }
         }
     }
 }
