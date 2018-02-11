@@ -43,7 +43,6 @@ namespace UnturnedSL
                 string extralo = settings.ReadLine();
                 string path = settings.ReadLine();
                 settings.Close(); /*Loads settings from file and checks if all lines are present and valid*/
-                settings.Close(); /*Loads settings from file and checks if all lines are present and valid*/
                 Validation(name, map, welcome, port, data, extralo, path, out bool valid);
                 Run(valid, name, map, welcome, port, data, extralo, path);
             }
