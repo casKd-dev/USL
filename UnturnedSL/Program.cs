@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Diagnostics;
 
@@ -16,9 +12,10 @@ namespace UnturnedSL
             string title = "USL by casKd running on version " + lauversion;
             Console.Title = title;
             Console.SetWindowSize(100,20);
-            if (!File.Exists("settings.cfg")) { /*Checks for new users*/
+            if (!File.Exists("config/settings.cfg")) { /*Checks for new users*/
                 FirstSetup();
-                TextReader settings = new StreamReader("settings.cfg", true);
+                /*Need help at separating this in a function*/
+                TextReader settings = new StreamReader("config/settings.cfg", true);
                 string name = settings.ReadLine();
                 string map = settings.ReadLine();
                 string welcome = settings.ReadLine();
@@ -34,7 +31,8 @@ namespace UnturnedSL
 
 
             } else {
-                TextReader settings = new StreamReader("settings.cfg", true);
+                /*Need help at separating this in a function*/
+                TextReader settings = new StreamReader("config/settings.cfg", true);
                 string name = settings.ReadLine();
                 string map = settings.ReadLine();
                 string welcome = settings.ReadLine();
@@ -120,7 +118,8 @@ namespace UnturnedSL
             string path = answ[6];
             Console.Clear();
             /*Stores data into a file*/
-            TextWriter settings = new StreamWriter("settings.cfg", true);
+            MkDirIfNotExist("config");
+            TextWriter settings = new StreamWriter("settings/config.cfg", true);
             settings.WriteLine(name);
             settings.WriteLine(map);
             settings.WriteLine(welcome);
@@ -150,7 +149,7 @@ namespace UnturnedSL
             string debugtext = 
                 "Currently running from:" + Environment.NewLine +
                 Directory.GetCurrentDirectory() + Environment.NewLine +
-                "Config exists: " + File.Exists("settings.cfg") + Environment.NewLine;
+                "Config exists: " + File.Exists("config/settings.cfg") + Environment.NewLine;
             Console.WriteLine(debugtext);
         }
         static void Run(bool valid, string name, string map, string welcome, string port, string data, string extralo, string path)
@@ -177,6 +176,11 @@ namespace UnturnedSL
                 Console.ReadKey();
                 Environment.Exit(0);
             }
+        }
+        static void MkDirIfNotExist(string name)
+        {
+            if (Directory.Exists(name)) { }
+            else { Directory.CreateDirectory(name); }
         }
     }
 }
