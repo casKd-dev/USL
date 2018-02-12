@@ -12,38 +12,23 @@ namespace UnturnedSL
             string title = "USL by casKd running on version " + lauversion;
             Console.Title = title;
             Console.SetWindowSize(100,20);
-            if (!File.Exists("config/settings.cfg")) { /*Checks for new users*/
+            if (Directory.GetFiles("config").Length == 0)
+            { /*Checks for new users*/
                 FirstSetup();
-                /*Need help at separating this in a function*/
-                TextReader settings = new StreamReader("config/settings.cfg", true);
-                string name = settings.ReadLine();
-                string map = settings.ReadLine();
-                string welcome = settings.ReadLine();
-                string port = settings.ReadLine();
-                string data = settings.ReadLine();
-                string extralo = settings.ReadLine();
-                string path = settings.ReadLine();
-                settings.Close(); /*Loads settings from file and checks if all lines are present and valid*/
-                Console.ForegroundColor = ConsoleColor.Green;
-                string launchop = "-nographics -batchmode -name " + "\"" + name + "\"" + " -map " + map + " -welcome " + "\"" + welcome + "\"" + " -port:" + port + " " + extralo + " +secureserver/" + data;
-                Validation(name, map, welcome, port, data, extralo, path, out bool valid);
-                Run(valid, name, map, welcome, data, port, extralo, path);
-
-
-            } else {
-                /*Need help at separating this in a function*/
-                TextReader settings = new StreamReader("config/settings.cfg", true);
-                string name = settings.ReadLine();
-                string map = settings.ReadLine();
-                string welcome = settings.ReadLine();
-                string port = settings.ReadLine();
-                string data = settings.ReadLine();
-                string extralo = settings.ReadLine();
-                string path = settings.ReadLine();
-                settings.Close(); /*Loads settings from file and checks if all lines are present and valid*/
-                Validation(name, map, welcome, port, data, extralo, path, out bool valid);
-                Run(valid, name, map, welcome, port, data, extralo, path);
-            }
+            } else { }
+            string[] oFiles = Directory.GetFiles("config", "*.cfg");
+            /*Loads settings from file and checks if all lines are present and valid*/
+            TextReader settings = new StreamReader(oFiles[0], true);
+            string name = settings.ReadLine();
+            string map = settings.ReadLine();
+            string welcome = settings.ReadLine();
+            string port = settings.ReadLine();
+            string data = settings.ReadLine();
+            string extralo = settings.ReadLine();
+            string path = settings.ReadLine();
+            settings.Close();
+            Validation(name, map, welcome, port, data, extralo, path, out bool valid);
+            Run(valid, name, map, welcome, port, data, extralo, path);
         }
         /*Validate if all input is correct*/
         static void Validation(string name, string map, string welcome, string port, string data, string extralo, string path,out bool valid)
@@ -178,6 +163,7 @@ namespace UnturnedSL
             }
         }
         static void MkDirIfNotExist(string name)
+            /*This method name explains itself*/
         {
             if (Directory.Exists(name)) { }
             else { Directory.CreateDirectory(name); }
