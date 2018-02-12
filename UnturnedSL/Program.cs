@@ -12,7 +12,7 @@ namespace UnturnedSL
             string title = "USL by casKd running on version " + lauversion;
             Console.Title = title;
             Console.SetWindowSize(100,20);
-            if (Directory.GetFiles("config").Length == 0) {FirstSetup(); } /*Checks for new users*/
+            if (Directory.GetFiles("config", ".cfg").Length == 0) {FirstSetup(); } /*Checks for new users*/
             string[] oFiles = Directory.GetFiles("config", "*.cfg");
             /*Loads settings from file and checks if all lines are present and valid*/
             TextReader settings = new StreamReader(oFiles[0], true);
