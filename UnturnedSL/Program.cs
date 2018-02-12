@@ -12,10 +12,7 @@ namespace UnturnedSL
             string title = "USL by casKd running on version " + lauversion;
             Console.Title = title;
             Console.SetWindowSize(100,20);
-            if (Directory.GetFiles("config").Length == 0)
-            { /*Checks for new users*/
-                FirstSetup();
-            } else { }
+            if (Directory.GetFiles("config").Length == 0) {FirstSetup(); } /*Checks for new users*/
             string[] oFiles = Directory.GetFiles("config", "*.cfg");
             /*Loads settings from file and checks if all lines are present and valid*/
             TextReader settings = new StreamReader(oFiles[0], true);
@@ -30,8 +27,9 @@ namespace UnturnedSL
             Validation(name, map, welcome, port, data, extralo, path, out bool valid);
             Run(valid, name, map, welcome, port, data, extralo, path);
         }
-        /*Validate if all input is correct*/
+
         static void Validation(string name, string map, string welcome, string port, string data, string extralo, string path,out bool valid)
+        /*Validate if all input is correct*/
         {
             /*Checks if every condition is true*/
             bool bNum = int.TryParse(port, out int i);
@@ -48,8 +46,9 @@ namespace UnturnedSL
             )
             { valid = true;} else { valid = false;}
         }
-        /*First setup*/
+
         static void FirstSetup()
+        /*First setup*/
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Welcome!" + Environment.NewLine);
@@ -93,7 +92,7 @@ namespace UnturnedSL
                     Console.Clear();
                 }
             }
-            /*Saves data*/
+            /*Transfers data from array to variables*/
             string map = answ[0];
             string name = answ[1];
             string welcome = answ[2];
@@ -114,8 +113,9 @@ namespace UnturnedSL
             settings.WriteLine(path);
             settings.Close();
         }
+
         static void DisplayText(string name, string map, string welcome, string port, string data, string extralo, string path) 
-            /*Outputs info of the current configuration*/
+        /*Outputs info of the current configuration*/
         {
             string displaytext =
                     "Server info:" + Environment.NewLine + Environment.NewLine +
@@ -128,8 +128,9 @@ namespace UnturnedSL
                     "Path to Game:" + "\t" + "\t" + path + Environment.NewLine;
             Console.WriteLine(displaytext);
         }
+
         static void DebugInfo()
-            /*Helps at debugging, mostly needed when having problems*/
+        /*Helps at debugging, mostly needed when having problems*/
         {
             string debugtext = 
                 "Currently running from:" + Environment.NewLine +
@@ -137,6 +138,7 @@ namespace UnturnedSL
                 "Config exists: " + File.Exists("config/settings.cfg") + Environment.NewLine;
             Console.WriteLine(debugtext);
         }
+
         static void Run(bool valid, string name, string map, string welcome, string port, string data, string extralo, string path)
         {
             if (valid == true)
@@ -162,6 +164,7 @@ namespace UnturnedSL
                 Environment.Exit(0);
             }
         }
+
         static void MkDirIfNotExist(string name)
             /*This method name explains itself*/
         {
