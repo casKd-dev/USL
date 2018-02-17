@@ -12,7 +12,8 @@ namespace UnturnedSL
             string title = "USL by casKd running on version " + lauversion;
             Console.Title = title;
             Console.SetWindowSize(100,20);
-            if (Directory.GetFiles("config", ".cfg").Length == 0) {FirstSetup(); } /*Checks for new users*/
+            MkDirIfNotExist("config");
+            if (Directory.GetFiles("config", "*.cfg").Length == 0) {FirstSetup(); } /*Checks for new users*/
             string[] oFiles = Directory.GetFiles("config", "*.cfg");
             /*Loads settings from file and checks if all lines are present and valid*/
             TextReader settings = new StreamReader(oFiles[0], true);
@@ -51,7 +52,7 @@ namespace UnturnedSL
         /*First setup*/
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Welcome!" + Environment.NewLine);
+            Console.WriteLine("Welcome!" + Environment.NewLine + "Do you want to go through the setup? [N/y]" + Environment.NewLine);
             string[] defvalue = {
                     "PEI",
                     "USL-My server",
@@ -69,27 +70,40 @@ namespace UnturnedSL
                     "Do you want any other parameters for your server?",
                     "Where is your Unturned installation located?"
             };
-            /*Asks user to setup their own server, which later saves in a config file*/
-            Console.ForegroundColor = ConsoleColor.Yellow;
             string[] setvals = { "map", "name", "welcome", "port", "data", "extralo", "path" };
             var loopval = 0;
             string[] answ = new string[7];
-            foreach (string val in setvals)
+            /*Asks user to setup their own server, which later saves in a config file*/
+            if (String.Equals(Console.ReadLine(), "y", StringComparison.CurrentCultureIgnoreCase) == true)
             {
-                while (loopval <= 6)
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Clear();
+                foreach (string val in setvals)
                 {
-                    Console.WriteLine(question[loopval] + Environment.NewLine + "Default value: " + defvalue[loopval]);
-                    answ[loopval] = Console.ReadLine();
-                    if (String.IsNullOrWhiteSpace(answ[loopval]))
+                    while (loopval <= 6)
+                    {
+                        Console.WriteLine(question[loopval] + Environment.NewLine + "Default value: " + defvalue[loopval]);
+                        answ[loopval] = Console.ReadLine();
+                        if (String.IsNullOrWhiteSpace(answ[loopval]))
+                        {
+                            answ[loopval] = defvalue[loopval];
+                            loopval++;
+                        }
+                        else
+                        {
+                            loopval++;
+                        }
+                        Console.Clear();
+                    }
+                }
+            } else {
+                foreach (string val in setvals)
+                {
+                    while (loopval <= 6)
                     {
                         answ[loopval] = defvalue[loopval];
                         loopval++;
                     }
-                    else
-                    {
-                        loopval++;
-                    }
-                    Console.Clear();
                 }
             }
             /*Transfers data from array to variables*/
@@ -102,7 +116,6 @@ namespace UnturnedSL
             string path = answ[6];
             Console.Clear();
             /*Stores data into a file*/
-            MkDirIfNotExist("config");
             TextWriter settings = new StreamWriter("config/settings.cfg", true);
             settings.WriteLine(name);
             settings.WriteLine(map);
