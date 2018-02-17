@@ -1,7 +1,7 @@
 # USL
-[![Main Banner](https://s14.postimg.org/x2qqyft69/banner.png)]
+![Main Banner](https://s14.postimg.org/x2qqyft69/banner.png)
 
-[![TravisCI build](https://travis-ci.org/casKd-dev/USL.svg?branch=dev)]
+![TravisCI build](https://travis-ci.org/casKd-dev/USL.svg?branch=dev)
   
 A Gameserver launcher written in C# . 
 This project aims to help people not as experienced with Unturned or computers in general.
