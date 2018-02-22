@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Diagnostics;
 
@@ -16,39 +12,25 @@ namespace UnturnedSL
             string title = "USL by casKd running on version " + lauversion;
             Console.Title = title;
             Console.SetWindowSize(100,20);
-            if (!File.Exists("settings.cfg")) { /*Checks for new users*/
-                FirstSetup();
-                TextReader settings = new StreamReader("settings.cfg", true);
-                string name = settings.ReadLine();
-                string map = settings.ReadLine();
-                string welcome = settings.ReadLine();
-                string port = settings.ReadLine();
-                string data = settings.ReadLine();
-                string extralo = settings.ReadLine();
-                string path = settings.ReadLine();
-                settings.Close(); /*Loads settings from file and checks if all lines are present and valid*/
-                Console.ForegroundColor = ConsoleColor.Green;
-                string launchop = "-nographics -batchmode -name " + "\"" + name + "\"" + " -map " + map + " -welcome " + "\"" + welcome + "\"" + " -port:" + port + " " + extralo + " +secureserver/" + data;
-                Validation(name, map, welcome, port, data, extralo, path, out bool valid);
-                Run(valid, name, map, welcome, data, port, extralo, path);
-
-
-            } else {
-                TextReader settings = new StreamReader("settings.cfg", true);
-                string name = settings.ReadLine();
-                string map = settings.ReadLine();
-                string welcome = settings.ReadLine();
-                string port = settings.ReadLine();
-                string data = settings.ReadLine();
-                string extralo = settings.ReadLine();
-                string path = settings.ReadLine();
-                settings.Close(); /*Loads settings from file and checks if all lines are present and valid*/
-                Validation(name, map, welcome, port, data, extralo, path, out bool valid);
-                Run(valid, name, map, welcome, port, data, extralo, path);
-            }
+            MkDirIfNotExist("config");
+            if (Directory.GetFiles("config", "*.cfg").Length == 0) {FirstSetup(); } /*Checks for new users*/
+            string[] oFiles = Directory.GetFiles("config", "*.cfg");
+            /*Loads settings from file and checks if all lines are present and valid*/
+            TextReader settings = new StreamReader(oFiles[0], true);
+            string name = settings.ReadLine();
+            string map = settings.ReadLine();
+            string welcome = settings.ReadLine();
+            string port = settings.ReadLine();
+            string data = settings.ReadLine();
+            string extralo = settings.ReadLine();
+            string path = settings.ReadLine();
+            settings.Close();
+            Validation(name, map, welcome, port, data, extralo, path, out bool valid);
+            Run(valid, name, map, welcome, port, data, extralo, path);
         }
-        /*Validate if all input is correct*/
+
         static void Validation(string name, string map, string welcome, string port, string data, string extralo, string path,out bool valid)
+        /*Validate if all input is correct*/
         {
             /*Checks if every condition is true*/
             bool bNum = int.TryParse(port, out int i);
@@ -65,11 +47,12 @@ namespace UnturnedSL
             )
             { valid = true;} else { valid = false;}
         }
-        /*First setup*/
+
         static void FirstSetup()
+        /*First setup*/
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Welcome!" + Environment.NewLine);
+            Console.WriteLine("Welcome!" + Environment.NewLine + "Do you want to go through the setup? [N/y]" + Environment.NewLine);
             string[] defvalue = {
                     "PEI",
                     "USL-My server",
@@ -87,30 +70,43 @@ namespace UnturnedSL
                     "Do you want any other parameters for your server?",
                     "Where is your Unturned installation located?"
             };
-            /*Asks user to setup their own server, which later saves in a config file*/
-            Console.ForegroundColor = ConsoleColor.Yellow;
             string[] setvals = { "map", "name", "welcome", "port", "data", "extralo", "path" };
             var loopval = 0;
             string[] answ = new string[7];
-            foreach (string val in setvals)
+            /*Asks user to setup their own server, which later saves in a config file*/
+            if (String.Equals(Console.ReadLine(), "y", StringComparison.CurrentCultureIgnoreCase) == true)
             {
-                while (loopval <= 6)
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Clear();
+                foreach (string val in setvals)
                 {
-                    Console.WriteLine(question[loopval] + Environment.NewLine + "Default value: " + defvalue[loopval]);
-                    answ[loopval] = Console.ReadLine();
-                    if (String.IsNullOrWhiteSpace(answ[loopval]))
+                    while (loopval <= 6)
+                    {
+                        Console.WriteLine(question[loopval] + Environment.NewLine + "Default value: " + defvalue[loopval]);
+                        answ[loopval] = Console.ReadLine();
+                        if (String.IsNullOrWhiteSpace(answ[loopval]))
+                        {
+                            answ[loopval] = defvalue[loopval];
+                            loopval++;
+                        }
+                        else
+                        {
+                            loopval++;
+                        }
+                        Console.Clear();
+                    }
+                }
+            } else {
+                foreach (string val in setvals)
+                {
+                    while (loopval <= 6)
                     {
                         answ[loopval] = defvalue[loopval];
                         loopval++;
                     }
-                    else
-                    {
-                        loopval++;
-                    }
-                    Console.Clear();
                 }
             }
-            /*Saves data*/
+            /*Transfers data from array to variables*/
             string map = answ[0];
             string name = answ[1];
             string welcome = answ[2];
@@ -120,7 +116,7 @@ namespace UnturnedSL
             string path = answ[6];
             Console.Clear();
             /*Stores data into a file*/
-            TextWriter settings = new StreamWriter("settings.cfg", true);
+            TextWriter settings = new StreamWriter("config/settings.cfg", true);
             settings.WriteLine(name);
             settings.WriteLine(map);
             settings.WriteLine(welcome);
@@ -130,8 +126,9 @@ namespace UnturnedSL
             settings.WriteLine(path);
             settings.Close();
         }
+
         static void DisplayText(string name, string map, string welcome, string port, string data, string extralo, string path) 
-            /*Outputs info of the current configuration*/
+        /*Outputs info of the current configuration*/
         {
             string displaytext =
                     "Server info:" + Environment.NewLine + Environment.NewLine +
@@ -144,15 +141,17 @@ namespace UnturnedSL
                     "Path to Game:" + "\t" + "\t" + path + Environment.NewLine;
             Console.WriteLine(displaytext);
         }
+
         static void DebugInfo()
-            /*Helps at debugging, mostly needed when having problems*/
+        /*Helps at debugging, mostly needed when having problems*/
         {
             string debugtext = 
                 "Currently running from:" + Environment.NewLine +
                 Directory.GetCurrentDirectory() + Environment.NewLine +
-                "Config exists: " + File.Exists("settings.cfg") + Environment.NewLine;
+                "Config exists: " + File.Exists("config/settings.cfg") + Environment.NewLine;
             Console.WriteLine(debugtext);
         }
+
         static void Run(bool valid, string name, string map, string welcome, string port, string data, string extralo, string path)
         {
             if (valid == true)
@@ -177,6 +176,13 @@ namespace UnturnedSL
                 Console.ReadKey();
                 Environment.Exit(0);
             }
+        }
+
+        static void MkDirIfNotExist(string name)
+            /*This method name explains itself*/
+        {
+            if (Directory.Exists(name)) { }
+            else { Directory.CreateDirectory(name); }
         }
     }
 }
