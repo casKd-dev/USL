@@ -8,7 +8,7 @@ namespace UnturnedSL
     {
         static void Main(string[] args)
         {
-            string lauversion = "1.13 rewrite";
+            string lauversion = "1.14";
             string title = "USL by casKd running on version " + lauversion;
             Console.Title = title;
             Console.SetWindowSize(100,20);
