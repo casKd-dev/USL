@@ -29,7 +29,7 @@ namespace UnturnedSL
             Run(valid, name, map, welcome, port, data, extralo, path);
         }
 
-        static void Validation(string name, string map, string welcome, string port, string data, string extralo, string path,out bool valid)
+        static void Validation(string name, string map, string welcome, string port, string data, string extralo, string path, out bool valid)
         /*Validate if all input is correct*/
         {
             /*Checks if every condition is true*/
@@ -163,8 +163,8 @@ namespace UnturnedSL
                     "If you still get the problem, report it on GitHub!");
                 DisplayText(name, map, welcome, data, port, extralo, path);
                 Console.Beep(2300, 250);
+                Console.WriteLine(Environment.NewLine + "Press any key to exit...");
                 Console.ReadKey();
-                Environment.Exit(1);
             }
             else
             {
@@ -172,10 +172,10 @@ namespace UnturnedSL
                 Console.WriteLine("Welcome!" + Environment.NewLine);
                 DisplayText(name, map, welcome, data, port, extralo, path);
                 string launchop = "-nographics -batchmode -name " + "\"" + name + "\"" + " -map " + map + " -welcome " + "\"" + welcome + "\"" + " -port:" + port + " " + extralo + " +secureserver/" + data;
-                Process.Start(path + @"\Unturned.exe ", launchop);
-                Console.ReadKey();
-                Environment.Exit(0);
+                var proc = Process.Start(path + @"\Unturned.exe ", launchop);
+                proc.WaitForExit(600000);
             }
+            Environment.Exit(0);
         }
 
         static void MkDirIfNotExist(string name)
