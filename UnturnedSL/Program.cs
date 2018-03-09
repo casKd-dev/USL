@@ -136,8 +136,8 @@ namespace UnturnedSL
                     "Server Name:" + "\t" + "\t" + name + Environment.NewLine +
                     "Running Map:" + "\t" + "\t" + map + Environment.NewLine +
                     "Welcome Msg:" + "\t" + "\t" + welcome + Environment.NewLine +
-                    "Data folder:" + "\t" + "\t" + data + Environment.NewLine +
                     "Running port:" + "\t" + "\t" + port + Environment.NewLine +
+                    "Data folder:" + "\t" + "\t" + data + Environment.NewLine +
                     "Extra options:" + "\t" + "\t" + extralo + Environment.NewLine +
                     "Path to Game:" + "\t" + "\t" + path + Environment.NewLine;
             Console.WriteLine(displaytext);
@@ -162,7 +162,7 @@ namespace UnturnedSL
                 Console.WriteLine("Oh, noes! Seems like the settings file contains wrong info." + Environment.NewLine +
                     "Try deleting it or correcting it!" + Environment.NewLine + Environment.NewLine +
                     "If you still get the problem, report it on GitHub!");
-                DisplayText(name, map, welcome, data, port, extralo, path);
+                DisplayText(name, map, welcome, port, data, extralo, path);
                 Console.Beep(2300, 250);
                 Console.WriteLine(Environment.NewLine + "Press any key to exit...");
                 Console.ReadKey();
@@ -171,7 +171,7 @@ namespace UnturnedSL
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Server is up and running." + Environment.NewLine);
-                DisplayText(name, map, welcome, data, port, extralo, path);
+                DisplayText(name, map, welcome, port, data, extralo, path);
                 string launchop = "-nographics -batchmode -name " + "\"" + name + "\"" + " -map " + map + " -welcome " + "\"" + welcome + "\"" + " -port:" + port + " " + extralo + " +secureserver/" + data;
                 Process proc = new Process();
                 proc.StartInfo.FileName = path + @"\Unturned.exe ";
