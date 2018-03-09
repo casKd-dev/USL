@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Diagnostics;
+using System.Threading;
 
 namespace UnturnedSL
 {
@@ -169,15 +170,32 @@ namespace UnturnedSL
             else
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Welcome!" + Environment.NewLine);
+                Console.WriteLine("Server is up and running." + Environment.NewLine);
                 DisplayText(name, map, welcome, data, port, extralo, path);
                 string launchop = "-nographics -batchmode -name " + "\"" + name + "\"" + " -map " + map + " -welcome " + "\"" + welcome + "\"" + " -port:" + port + " " + extralo + " +secureserver/" + data;
-                var proc = Process.Start(path + @"\Unturned.exe ", launchop);
-                proc.WaitForExit(600000);
+                Process proc = new Process();
+                proc.StartInfo.FileName = path + @"\Unturned.exe ";
+                proc.StartInfo.Arguments = launchop;
+                proc.Start();
+                Process[] procstat = Process.GetProcessesByName("Unturned");
+                Console.WriteLine("Started at: " + "\t" + "\t" + System.DateTime.Now);
+                while (procstat.Length != 0)
+                {
+                    Console.Write("\r{0}", "Current time: " + "\t" + "\t" + System.DateTime.Now.ToLongTimeString());
+                    Thread.Sleep(1000);
+                    procstat = Process.GetProcessesByName("Unturned");
+                }
+            }
+            Console.ForegroundColor = ConsoleColor.Red;
+            int loop = 5;
+            Console.WriteLine(Environment.NewLine + Environment.NewLine + "Seems like the Unturned server was closed!" + Environment.NewLine);
+            while (loop >= 1) {
+                Console.Write("\r{0}","Exiting... [" + loop + "]");
+                Thread.Sleep(1000);
+                loop--;
             }
             Environment.Exit(0);
         }
-
         static void MkDirIfNotExist(string name)
             /*This method name explains itself*/
         {
