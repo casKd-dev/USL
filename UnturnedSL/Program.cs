@@ -28,6 +28,8 @@ namespace UnturnedSL
             settings.Close();
             Validation(name, map, welcome, port, data, extralo, path, out bool valid);
             Run(valid, name, map, welcome, port, data, extralo, path);
+            Console.ResetColor();
+            Environment.Exit(0);
         }
 
         static void Validation(string name, string map, string welcome, string port, string data, string extralo, string path, out bool valid)
@@ -194,7 +196,6 @@ namespace UnturnedSL
                 Thread.Sleep(1000);
                 loop--;
             }
-            Environment.Exit(0);
         }
         static void MkDirIfNotExist(string name)
             /*This method name explains itself*/
