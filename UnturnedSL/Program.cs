@@ -135,9 +135,9 @@ namespace UnturnedSL
         {
             string displaytext =
                     "Server info:" + Environment.NewLine + Environment.NewLine +
-                    "Server Name:" + "\t" + "\t" + name + Environment.NewLine +
+                    "Server Name:" + "\t" + "\t" + "\"" + name + "\"" + Environment.NewLine +
                     "Running Map:" + "\t" + "\t" + map + Environment.NewLine +
-                    "Welcome Msg:" + "\t" + "\t" + welcome + Environment.NewLine +
+                    "Welcome Msg:" + "\t" + "\t" + "\"" + welcome + "\"" + Environment.NewLine +
                     "Running port:" + "\t" + "\t" + port + Environment.NewLine +
                     "Data folder:" + "\t" + "\t" + data + Environment.NewLine +
                     "Extra options:" + "\t" + "\t" + extralo + Environment.NewLine +
@@ -168,6 +168,7 @@ namespace UnturnedSL
                 Console.Beep(2300, 250);
                 Console.WriteLine(Environment.NewLine + "Press any key to exit...");
                 Console.ReadKey();
+                Environment.Exit(1);
             }
             else
             {
